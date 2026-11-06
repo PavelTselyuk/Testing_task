@@ -9,7 +9,7 @@
 `java -jar -Dsecret=*your_x_api_key* -Dmock=http://localhost:8888/ internal-0.0.1-SNAPSHOT.jar`  
 
 Для корректной работы нам нужно добавить 2 мока(приложение возвращает ответ только в зависимости от кода, заглушки будут возвращать 200 код): при запуске wiremock-standalone появляются 2 папки(mappings и __files) внутри mappings создаем 2 json файла(имена любые):  
-```
+```json
 {
   "request": {
     "method": "POST",
@@ -21,7 +21,7 @@
 }
 ```
 ---
-```
+```json
 {
   "request": {
     "method": "POST",
