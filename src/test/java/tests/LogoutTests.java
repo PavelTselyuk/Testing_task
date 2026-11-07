@@ -1,50 +1,51 @@
 package tests;
 
 import models.ResponseModel;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static tests.TestData.*;
-import static tests.TestData.RESULT_ERROR;
 
+@DisplayName("LogoutTests")
 public class LogoutTests extends TestBase {
 
     @Test
+    @DisplayName("Успешный логаут")
     public void successfulLogoutTest() {
         String token = generateToken();
         api.login(token, X_API_KEY, 200);
 
         ResponseModel response = api.logout(token, X_API_KEY, 200);
-        assertThat(response.getResult()).isEqualTo(RESULT_OK);
+        checkResult(response, RESULT_OK);
     }
 
 
     @Test
+    @DisplayName("Ошибка логаута при отсутствии токена в БД")
     public void errorLogoutWithNonExistedTokenTest() {
         String token = generateToken();
 
         ResponseModel response = api.logout(token, X_API_KEY, 403);
 
-        assertThat(response.getResult()).isEqualTo(RESULT_ERROR);
         String expectedMessage = String.format("Token '%s' not found", token);
-        assertThat(response.getMessage()).isEqualTo(expectedMessage);
+        checkResultAndMessage(response, RESULT_ERROR, expectedMessage);
     }
 
     @Test
+    @DisplayName("Ошибка логаута при неправильным формате токена")
     public void errorLogoutWithWrongFormattedTokenTest() {
         ResponseModel response = api.logout(WRONG_FORMATTED_TOKEN, X_API_KEY, 400);
 
-        assertThat(response.getResult()).isEqualTo(RESULT_ERROR);
         String expectedMessage = "token: должно соответствовать \"^[0-9A-F]{32}$\"";
-        assertThat(response.getMessage()).isEqualTo(expectedMessage);
+        checkResultAndMessage(response, RESULT_ERROR, expectedMessage);
     }
 
     @Test
+    @DisplayName("Ошибка логаута при отсутствии токена в запросе")
     public void errorLogoutWithNoTokenTest() {
         ResponseModel response = api.logout(null, X_API_KEY, 400);
 
-        assertThat(response.getResult()).isEqualTo(RESULT_ERROR);
         String expectedMessage = "token: не должно равняться null";
-        assertThat(response.getMessage()).isEqualTo(expectedMessage);
+        checkResultAndMessage(response, RESULT_ERROR, expectedMessage);
     }
 }

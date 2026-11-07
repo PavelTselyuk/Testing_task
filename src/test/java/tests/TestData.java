@@ -1,10 +1,8 @@
 package tests;
 
-import api.ApiClient;
 import io.github.cdimascio.dotenv.Dotenv;
 
 public class TestData {
-
 
     public static final String ENDPOINT = "/endpoint";
     public static final String RESULT_OK = "OK";
